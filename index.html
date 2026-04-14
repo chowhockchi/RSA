@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSA Programme</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; color: #333; padding: 20px; max-width: 700px; margin: auto; }
+        h1 { color: #6a5acd; text-align: center; }
+        .card { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-left: 5px solid #6a5acd; }
+        label { display: inline-block; width: 120px; font-weight: bold; margin-bottom: 10px; }
+        input[type="number"] { padding: 8px; border: 1px solid #ccc; border-radius: 5px; width: 200px; margin-bottom: 10px; }
+        button { background-color: #6a5acd; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; margin-top: 10px; transition: 0.3s; }
+        button:hover { background-color: #483d8b; }
+        .result-box { background: #e6e6fa; padding: 15px; border-radius: 8px; margin-top: 15px; font-family: monospace; font-size: 15px; color: #4b0082; word-break: break-all; }
+        .radio-group { margin: 15px 0; padding: 10px; background: #f8f8ff; border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+    <h1>RSA Programme</h1>
+    <p style="text-align: center; color: #666;">Powered by JavaScript</p>
+
+    <div class="card">
+        <h3>Key Generation</h3>
+        <label>输入质数 p:</label> <input type="number" id="inputP" value="61"><br>
+        <label>输入质数 q:</label> <input type="number" id="inputQ" value="53"><br>
+        <button onclick="generateKeys()">Generate Key</button>
+        
+        <div class="result-box" id="keyResult">
+            Public Key (n,e): generating<br>
+            Private Key (n,d): generating
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Execution (Crypto)</h3>
+        
+        <div class="radio-group">
+            <strong>Mode: </strong>
+            <input type="radio" id="modeEnc" name="opMode" value="encrypt" checked>
+            <label for="modeEnc" style="width: auto;">Encryption (e)</label>
+            
+            <input type="radio" id="modeDec" name="opMode" value="decrypt">
+            <label for="modeDec" style="width: auto;">Decryption (d)</label>
+        </div>
+
+        <label>Input a number to be encrypted/decrypted: </label> 
+        <input type="number" id="inputText" placeholder="number"><br>
+        <button onclick="executeCrypto()">Calculate</button>
+
+        <div class="result-box">
+            <strong>Result: </strong> <span id="cryptoResult" style="font-size: 18px; font-weight: bold; color: #ff1493;">...</span>
+        </div>
+    </div>
+
+    <script>
+        let global_n, global_e, global_d;
+
+        function gcd(a, b) {
+            while (b !== 0n) {
+                let temp = b;
+                b = a % b;
+                a = temp;
+            }
+            return a;
+        }
+
+        function modInverse(e, phi) {
+            let m0 = phi, y = 0n, x = 1n;
+            if (phi === 1n) return 0n;
+            while (e > 1n) {
+                let q = e / phi;
+                let t = phi;
+                phi = e % phi, e = t;
+                t = y;
+                y = x - q * y;
+                x = t;
+            }
+            if (x < 0n) x += m0;
+            return x;
+        }
+
+        function modPow(base, exp, mod) {
+            if (mod === 1n) return 0n;
+            let result = 1n;
+            base = base % mod;
+            while (exp > 0n) {
+                if (exp % 2n === 1n) result = (result * base) % mod;
+                exp = exp / 2n;
+                base = (base * base) % mod;
+            }
+            return result;
+        }
+
+        function generateKeys() {
+            try {
+                let p = BigInt(document.getElementById('inputP').value);
+                let q = BigInt(document.getElementById('inputQ').value);
+                
+                if (p <= 1n || q <= 1n) {
+                    alert("Prime must greater than 1.");
+                    return;
+                }
+
+                global_n = p * q;
+                let phi = (p - 1n) * (q - 1n);
+
+                global_e = 3n;
+                while (global_e < phi) {
+                    if (gcd(global_e, phi) === 1n) break;
+                    global_e++;
+                }
+
+                global_d = modInverse(global_e, phi);
+
+                const resBox = document.getElementById('keyResult');
+                resBox.innerHTML = `Public Key (n,e): <strong>(${global_n}, ${global_e})</strong><br>Private Key (n,d): <strong>(${global_n}, ${global_d})</strong>`;
+            } catch (err) {
+                alert("Please input number only.");
+            }
+        }
+
+        function executeCrypto() {
+            if (!global_n) {
+                alert("Private key not found");
+                return;
+            }
+            
+            let textVal = document.getElementById('inputText').value;
+            if (!textVal) {
+                alert("Please input number.");
+                return;
+            }
+
+            let msg = BigInt(textVal);
+            const mode = document.querySelector('input[name="opMode"]:checked').value;
+            const resSpan = document.getElementById('cryptoResult');
+
+            try {
+                let result;
+                if (mode === 'encrypt') {
+                    if (msg >= global_n) {
+                        alert(`The number inputed must less than n(${global_n}).`);
+                        return;
+                    }
+                    result = modPow(msg, global_e, global_n);
+                    resSpan.innerText = result.toString() + "Encrypted";
+                    document.getElementById('modeDec').checked = true; 
+                } else {
+                    result = modPow(msg, global_d, global_n);
+                    resSpan.innerText = result.toString() + "Decrypted";
+                    document.getElementById('modeEnc').checked = true;
+                }
+                
+                document.getElementById('inputText').value = result.toString();
+            } catch (err) {
+                resSpan.innerText = "Error";
+            }
+        }
+    </script>
+</body>
+</html>
