@@ -3,54 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RSA Programme</title>
+    <title>RSA Cryptography System - Strict Validation</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; color: #333; padding: 20px; max-width: 700px; margin: auto; }
-        h1 { color: #6a5acd; text-align: center; }
-        .card { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-left: 5px solid #6a5acd; }
-        label { display: inline-block; width: 120px; font-weight: bold; margin-bottom: 10px; }
-        input[type="number"] { padding: 8px; border: 1px solid #ccc; border-radius: 5px; width: 200px; margin-bottom: 10px; }
-        button { background-color: #6a5acd; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; margin-top: 10px; transition: 0.3s; }
-        button:hover { background-color: #483d8b; }
-        .result-box { background: #e6e6fa; padding: 15px; border-radius: 8px; margin-top: 15px; font-family: monospace; font-size: 15px; color: #4b0082; word-break: break-all; }
-        .radio-group { margin: 15px 0; padding: 10px; background: #f8f8ff; border-radius: 8px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; padding: 20px; max-width: 700px; margin: auto; }
+        h1 { color: #2c3e50; text-align: center; }
+        .card { background: #ffffff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-left: 5px solid #34495e; }
+        label { display: inline-block; width: 150px; font-weight: bold; margin-bottom: 10px; color: #2c3e50; }
+        input[type="number"] { padding: 8px; border: 1px solid #bdc3c7; border-radius: 4px; width: 200px; margin-bottom: 10px; font-family: monospace; }
+        button { background-color: #2980b9; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; margin-top: 10px; transition: background-color 0.3s; }
+        button:hover { background-color: #2471a3; }
+        .result-box { background: #ecf0f1; padding: 15px; border-radius: 4px; margin-top: 15px; font-family: monospace; font-size: 15px; color: #2c3e50; word-break: break-all; border: 1px solid #bdc3c7; }
+        .error-msg { color: #c0392b; font-weight: bold; margin-top: 10px; display: none; font-size: 14px; }
+        .radio-group { margin: 15px 0; padding: 15px; background: #fafbfc; border-radius: 4px; border: 1px solid #e0e6ed; }
+        .highlight-result { font-size: 18px; font-weight: bold; color: #27ae60; }
     </style>
 </head>
 <body>
 
-    <h1>RSA Programme</h1>
-    <p style="text-align: center; color: #666;">Powered by JavaScript</p>
+    <h1>🔐 RSA Cryptography System</h1>
+    <p style="text-align: center; color: #7f8c8d; font-size: 14px;">(Client-side implementation with Miller-Rabin primality testing)</p>
 
     <div class="card">
-        <h3>Key Generation</h3>
-        <label>输入质数 p:</label> <input type="number" id="inputP" value="61"><br>
-        <label>输入质数 q:</label> <input type="number" id="inputQ" value="53"><br>
-        <button onclick="generateKeys()">Generate Key</button>
+        <h3>Step 1: Key Generation</h3>
+        <label for="inputP">Prime Number (p):</label> 
+        <input type="number" id="inputP" placeholder="Enter a valid prime"><br>
+        
+        <label for="inputQ">Prime Number (q):</label> 
+        <input type="number" id="inputQ" placeholder="Enter a valid prime (q ≠ p)"><br>
+        
+        <button onclick="generateKeys()">Generate RSA Keys</button>
+        <div id="keyError" class="error-msg"></div>
         
         <div class="result-box" id="keyResult">
-            Public Key (n,e): generating<br>
-            Private Key (n,d): generating
+            Public Key (n, e): Pending generation...<br>
+            Private Key (n, d): Pending generation...
         </div>
     </div>
 
     <div class="card">
-        <h3>Execution (Crypto)</h3>
+        <h3>Step 2: Cryptographic Operation</h3>
         
         <div class="radio-group">
-            <strong>Mode: </strong>
+            <strong>Operation Mode:</strong>&nbsp;&nbsp;
             <input type="radio" id="modeEnc" name="opMode" value="encrypt" checked>
-            <label for="modeEnc" style="width: auto;">Encryption (e)</label>
-            
+            <label for="modeEnc" style="width: auto; font-weight: normal;">Encrypt (Requires M < n)</label>
+            &nbsp;&nbsp;
             <input type="radio" id="modeDec" name="opMode" value="decrypt">
-            <label for="modeDec" style="width: auto;">Decryption (d)</label>
+            <label for="modeDec" style="width: auto; font-weight: normal;">Decrypt</label>
         </div>
 
-        <label>Input a number to be encrypted/decrypted: </label> 
-        <input type="number" id="inputText" placeholder="number"><br>
-        <button onclick="executeCrypto()">Calculate</button>
+        <label for="inputText">Input Data (Numeric):</label> 
+        <input type="number" id="inputText" placeholder="Enter message or cipher"><br>
+        
+        <button onclick="executeCrypto()">Execute Operation</button>
+        <div id="cryptoError" class="error-msg"></div>
 
         <div class="result-box">
-            <strong>Result: </strong> <span id="cryptoResult" style="font-size: 18px; font-weight: bold; color: #ff1493;">...</span>
+            <strong>Output Result:</strong> <span id="cryptoResult" class="highlight-result">...</span>
         </div>
     </div>
 
@@ -58,10 +67,10 @@
         let global_n, global_e, global_d;
 
         function gcd(a, b) {
-            while (b !== 0n) {
-                let temp = b;
-                b = a % b;
-                a = temp;
+            while (b !== 0n) { 
+                let temp = b; 
+                b = a % b; 
+                a = temp; 
             }
             return a;
         }
@@ -72,9 +81,10 @@
             while (e > 1n) {
                 let q = e / phi;
                 let t = phi;
-                phi = e % phi, e = t;
-                t = y;
-                y = x - q * y;
+                phi = e % phi;
+                e = t;
+                t = y; 
+                y = x - q * y; 
                 x = t;
             }
             if (x < 0n) x += m0;
@@ -93,14 +103,69 @@
             return result;
         }
 
-        function generateKeys() {
-            try {
-                let p = BigInt(document.getElementById('inputP').value);
-                let q = BigInt(document.getElementById('inputQ').value);
+        function isProbablePrime(n, k = 5) {
+            if (n <= 1n) return false;
+            if (n <= 3n) return true;
+            if (n % 2n === 0n) return false;
+
+            let d = n - 1n;
+            let r = 0n;
+            while (d % 2n === 0n) {
+                d /= 2n;
+                r++;
+            }
+
+            for (let i = 0; i < k; i++) {
+                let a = BigInt(Math.floor(Math.random() * (Number(n > 100000n ? 100000n : n) - 3))) + 2n;
+                let x = modPow(a, d, n);
                 
-                if (p <= 1n || q <= 1n) {
-                    alert("Prime must greater than 1.");
-                    return;
+                if (x === 1n || x === n - 1n) continue;
+
+                let composite = true;
+                for (let j = 0n; j < r - 1n; j++) {
+                    x = modPow(x, 2n, n);
+                    if (x === n - 1n) {
+                        composite = false;
+                        break;
+                    }
+                }
+                if (composite) return false;
+            }
+            return true;
+        }
+
+        function showError(elementId, msg) {
+            const el = document.getElementById(elementId);
+            el.innerText = msg;
+            el.style.display = 'block';
+        }
+
+        function clearError(elementId) {
+            document.getElementById(elementId).style.display = 'none';
+        }
+
+        function generateKeys() {
+            clearError('keyError');
+            try {
+                let p_input = document.getElementById('inputP').value;
+                let q_input = document.getElementById('inputQ').value;
+
+                if (!p_input || !q_input) {
+                    throw new Error("Input fields for p and q cannot be empty.");
+                }
+
+                let p = BigInt(p_input);
+                let q = BigInt(q_input);
+                
+                if (p === q) {
+                    throw new Error("Prime numbers p and q must be distinct to correctly compute Euler's totient function.");
+                }
+                
+                if (!isProbablePrime(p)) {
+                    throw new Error(`The provided value for p (${p}) failed the primality test.`);
+                }
+                if (!isProbablePrime(q)) {
+                    throw new Error(`The provided value for q (${q}) failed the primality test.`);
                 }
 
                 global_n = p * q;
@@ -115,21 +180,26 @@
                 global_d = modInverse(global_e, phi);
 
                 const resBox = document.getElementById('keyResult');
-                resBox.innerHTML = `Public Key (n,e): <strong>(${global_n}, ${global_e})</strong><br>Private Key (n,d): <strong>(${global_n}, ${global_d})</strong>`;
+                resBox.innerHTML = `Public Key (n, e): <strong>(${global_n}, ${global_e})</strong><br>Private Key (n, d): <strong>(${global_n}, ${global_d})</strong>`;
+                
+                clearError('cryptoError');
             } catch (err) {
-                alert("Please input number only.");
+                showError('keyError', "Error: " + err.message);
+                global_n = null; 
+                document.getElementById('keyResult').innerHTML = "Public Key (n, e): Generation failed.<br>Private Key (n, d): Generation failed.";
             }
         }
 
         function executeCrypto() {
+            clearError('cryptoError');
             if (!global_n) {
-                alert("Private key not found");
+                showError('cryptoError', "System Error: RSA keys must be generated prior to execution.");
                 return;
             }
             
             let textVal = document.getElementById('inputText').value;
             if (!textVal) {
-                alert("Please input number.");
+                showError('cryptoError', "Input Error: Data field cannot be empty.");
                 return;
             }
 
@@ -141,21 +211,25 @@
                 let result;
                 if (mode === 'encrypt') {
                     if (msg >= global_n) {
-                        alert(`The number inputed must less than n(${global_n}).`);
-                        return;
+                        throw new Error(`Mathematical Constraint: The message M (${msg}) must be strictly less than the modulus n (${global_n}) to prevent data loss.`);
                     }
+                    if (msg < 0n) {
+                        throw new Error("Input value cannot be negative.");
+                    }
+
                     result = modPow(msg, global_e, global_n);
-                    resSpan.innerText = result.toString() + "Encrypted";
+                    resSpan.innerText = result.toString() + " (Encrypted Ciphertext)";
                     document.getElementById('modeDec').checked = true; 
                 } else {
                     result = modPow(msg, global_d, global_n);
-                    resSpan.innerText = result.toString() + "Decrypted";
-                    document.getElementById('modeEnc').checked = true;
+                    resSpan.innerText = result.toString() + " (Decrypted Plaintext)";
+                    document.getElementById('modeEnc').checked = true; 
                 }
                 
                 document.getElementById('inputText').value = result.toString();
             } catch (err) {
-                resSpan.innerText = "Error";
+                showError('cryptoError', "Execution Terminated: " + err.message);
+                resSpan.innerText = "...";
             }
         }
     </script>
