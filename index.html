@@ -181,6 +181,7 @@
     <div class="container">
         <h1>RSA Cryptography System</h1>
         <p class="subtitle">Secure Client-Side Implementation</p>
+        <button onclick="openManual()" style="background-color: #7f8c8d; margin-bottom: 20px; width: auto; padding: 10px 20px; font-size: 0.9rem;">📖 Read RSA Principles Manual</button>
 
         <div class="card">
             <h3>Key Generation</h3>
@@ -231,6 +232,10 @@
         let global_e = null;
         let global_d = null;
 
+        function openManual() {
+            const docLink = 'https://docs.google.com/document/d/1PuFXTfg91CXkKjmKO-oEcp7P8lSUZKKpTSR9DStSeL8/edit?tab=t.0';
+            window.open(docLink, '_blank');
+        }
         /**
          * Mathematical Utility Functions
          */
