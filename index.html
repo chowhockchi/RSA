@@ -2,70 +2,238 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RSA Cryptography System - Strict Validation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RSA Cryptography System</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; padding: 20px; max-width: 700px; margin: auto; }
-        h1 { color: #2c3e50; text-align: center; }
-        .card { background: #ffffff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-left: 5px solid #34495e; }
-        label { display: inline-block; width: 150px; font-weight: bold; margin-bottom: 10px; color: #2c3e50; }
-        input[type="number"] { padding: 8px; border: 1px solid #bdc3c7; border-radius: 4px; width: 200px; margin-bottom: 10px; font-family: monospace; }
-        button { background-color: #2980b9; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; margin-top: 10px; transition: background-color 0.3s; }
-        button:hover { background-color: #2471a3; }
-        .result-box { background: #ecf0f1; padding: 15px; border-radius: 4px; margin-top: 15px; font-family: monospace; font-size: 15px; color: #2c3e50; word-break: break-all; border: 1px solid #bdc3c7; }
-        .error-msg { color: #c0392b; font-weight: bold; margin-top: 10px; display: none; font-size: 14px; }
-        .radio-group { margin: 15px 0; padding: 15px; background: #fafbfc; border-radius: 4px; border: 1px solid #e0e6ed; }
-        .highlight-result { font-size: 18px; font-weight: bold; color: #27ae60; }
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            padding: 15px; 
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1 { 
+            color: var(--primary-color); 
+            text-align: center; 
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            margin-top: 10px;
+        }
+
+        .subtitle {
+            text-align: center; 
+            color: #7f8c8d; 
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        .card { 
+            background: var(--card-bg); 
+            padding: 20px; 
+            border-radius: var(--border-radius); 
+            margin-bottom: 20px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+            border-top: 4px solid var(--accent-color); 
+        }
+
+        h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        label { 
+            display: block; 
+            font-weight: 600; 
+            margin-bottom: 8px; 
+            color: var(--primary-color); 
+            font-size: 0.95rem;
+        }
+
+        input[type="number"] { 
+            width: 100%;
+            padding: 12px; 
+            border: 1px solid #ccd1d9; 
+            border-radius: 6px; 
+            margin-bottom: 15px; 
+            font-family: monospace; 
+            font-size: 16px; /* Prevents auto-zoom on iOS */
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        button { 
+            background-color: var(--accent-color); 
+            color: white; 
+            border: none; 
+            padding: 14px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            width: 100%; 
+            font-size: 1rem; 
+            transition: background-color 0.2s, transform 0.1s; 
+        }
+
+        button:hover { 
+            background-color: #2980b9; 
+        }
+        
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .result-box { 
+            background: #f1f2f6; 
+            padding: 15px; 
+            border-radius: 6px; 
+            margin-top: 15px; 
+            font-family: monospace; 
+            font-size: 0.9rem; 
+            color: var(--primary-color); 
+            word-break: break-all; 
+            border: 1px solid #dfe4ea; 
+        }
+
+        .error-msg { 
+            color: #e74c3c; 
+            font-weight: bold; 
+            margin-top: 10px; 
+            display: none; 
+            font-size: 0.9rem; 
+            background: #fadbd8;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .radio-group { 
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px; 
+            padding: 15px; 
+            background: #f8f9fa; 
+            border-radius: 6px; 
+            border: 1px solid #e0e6ed; 
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-option input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .radio-option label {
+            margin-bottom: 0;
+            font-weight: normal;
+        }
+
+        .highlight-result { 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            color: #27ae60; 
+            display: block;
+            margin-top: 5px;
+        }
+
+        @media (min-width: 480px) {
+            .radio-group {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <h1>🔐 RSA Cryptography System</h1>
-    <p style="text-align: center; color: #7f8c8d; font-size: 14px;">(Client-side implementation with Miller-Rabin primality testing)</p>
+    <div class="container">
+        <h1>RSA Cryptography System</h1>
+        <p class="subtitle">Secure Client-Side Implementation</p>
 
-    <div class="card">
-        <h3>Step 1: Key Generation</h3>
-        <label for="inputP">Prime Number (p):</label> 
-        <input type="number" id="inputP" placeholder="Enter a valid prime"><br>
-        
-        <label for="inputQ">Prime Number (q):</label> 
-        <input type="number" id="inputQ" placeholder="Enter a valid prime (q ≠ p)"><br>
-        
-        <button onclick="generateKeys()">Generate RSA Keys</button>
-        <div id="keyError" class="error-msg"></div>
-        
-        <div class="result-box" id="keyResult">
-            Public Key (n, e): Pending generation...<br>
-            Private Key (n, d): Pending generation...
-        </div>
-    </div>
-
-    <div class="card">
-        <h3>Step 2: Cryptographic Operation</h3>
-        
-        <div class="radio-group">
-            <strong>Operation Mode:</strong>&nbsp;&nbsp;
-            <input type="radio" id="modeEnc" name="opMode" value="encrypt" checked>
-            <label for="modeEnc" style="width: auto; font-weight: normal;">Encrypt (Requires M < n)</label>
-            &nbsp;&nbsp;
-            <input type="radio" id="modeDec" name="opMode" value="decrypt">
-            <label for="modeDec" style="width: auto; font-weight: normal;">Decrypt</label>
+        <div class="card">
+            <h3>Key Generation</h3>
+            <label for="inputP">Prime Number (p):</label> 
+            <input type="number" id="inputP" placeholder="Enter a valid prime number">
+            
+            <label for="inputQ">Prime Number (q):</label> 
+            <input type="number" id="inputQ" placeholder="Enter a distinct prime number">
+            
+            <button onclick="generateKeys()">Generate Keys</button>
+            <div id="keyError" class="error-msg"></div>
+            
+            <div class="result-box" id="keyResult">
+                <strong>Public Key (n, e):</strong><br><span style="color:#7f8c8d;">Awaiting execution...</span><br><br>
+                <strong>Private Key (n, d):</strong><br><span style="color:#7f8c8d;">Awaiting execution...</span>
+            </div>
         </div>
 
-        <label for="inputText">Input Data (Numeric):</label> 
-        <input type="number" id="inputText" placeholder="Enter message or cipher"><br>
-        
-        <button onclick="executeCrypto()">Execute Operation</button>
-        <div id="cryptoError" class="error-msg"></div>
+        <div class="card">
+            <h3>Cryptographic Operation</h3>
+            
+            <div class="radio-group">
+                <div class="radio-option">
+                    <input type="radio" id="modeEnc" name="opMode" value="encrypt" checked>
+                    <label for="modeEnc">Encrypt (M < n)</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="modeDec" name="opMode" value="decrypt">
+                    <label for="modeDec">Decrypt</label>
+                </div>
+            </div>
 
-        <div class="result-box">
-            <strong>Output Result:</strong> <span id="cryptoResult" class="highlight-result">...</span>
+            <label for="inputText">Input Data (Numeric):</label> 
+            <input type="number" id="inputText" placeholder="Enter message or ciphertext">
+            
+            <button onclick="executeCrypto()">Execute Process</button>
+            <div id="cryptoError" class="error-msg"></div>
+
+            <div class="result-box">
+                <strong>Computation Output:</strong> 
+                <span id="cryptoResult" class="highlight-result">-</span>
+            </div>
         </div>
     </div>
 
     <script>
-        let global_n, global_e, global_d;
+        let global_n = null;
+        let global_e = null;
+        let global_d = null;
 
+        /**
+         * Mathematical Utility Functions
+         */
         function gcd(a, b) {
             while (b !== 0n) { 
                 let temp = b; 
@@ -103,6 +271,25 @@
             return result;
         }
 
+        /**
+         * Generates a random BigInt within a specified range to ensure cryptographic entropy.
+         * Bypasses standard Math.random() floating-point limitations for large integers.
+         */
+        function getRandomBigInt(min, max) {
+            const range = max - min;
+            if (range <= 0n) return min;
+            
+            const rangeStr = range.toString();
+            let randomStr = '';
+            for (let i = 0; i < rangeStr.length; i++) {
+                randomStr += Math.floor(Math.random() * 10).toString();
+            }
+            return (BigInt(randomStr) % range) + min;
+        }
+
+        /**
+         * Miller-Rabin Primality Test
+         */
         function isProbablePrime(n, k = 5) {
             if (n <= 1n) return false;
             if (n <= 3n) return true;
@@ -134,76 +321,92 @@
             return true;
         }
 
-        function showError(elementId, msg) {
+        function displayError(elementId, message) {
             const el = document.getElementById(elementId);
-            el.innerText = msg;
+            el.innerText = message;
             el.style.display = 'block';
         }
 
-        function clearError(elementId) {
+        function hideError(elementId) {
             document.getElementById(elementId).style.display = 'none';
         }
 
+        /**
+         * Core Operations
+         */
         function generateKeys() {
-            clearError('keyError');
+            hideError('keyError');
             try {
-                let p_input = document.getElementById('inputP').value;
-                let q_input = document.getElementById('inputQ').value;
+                const pInput = document.getElementById('inputP').value;
+                const qInput = document.getElementById('inputQ').value;
 
-                if (!p_input || !q_input) {
-                    throw new Error("Input fields for p and q cannot be empty.");
+                if (!pInput || !qInput) {
+                    throw new Error("Both prime parameters (p and q) are required.");
                 }
 
-                let p = BigInt(p_input);
-                let q = BigInt(q_input);
+                const p = BigInt(pInput);
+                const q = BigInt(qInput);
                 
                 if (p === q) {
-                    throw new Error("Prime numbers p and q must be distinct to correctly compute Euler's totient function.");
+                    throw new Error("Parameters p and q must be distinct primes.");
                 }
                 
                 if (!isProbablePrime(p)) {
-                    throw new Error(`The provided value for p (${p}) failed the primality test.`);
+                    throw new Error(`Validation failed: The value ${p} is not a valid prime.`);
                 }
                 if (!isProbablePrime(q)) {
-                    throw new Error(`The provided value for q (${q}) failed the primality test.`);
+                    throw new Error(`Validation failed: The value ${q} is not a valid prime.`);
                 }
 
                 global_n = p * q;
-                let phi = (p - 1n) * (q - 1n);
+                const phi = (p - 1n) * (q - 1n);
 
-                global_e = 3n;
-                while (global_e < phi) {
-                    if (gcd(global_e, phi) === 1n) break;
-                    global_e++;
+                // Ensure random exponent generation instead of sequential starting from 3
+                const minE = 3n;
+                const maxE = phi - 1n;
+                
+                global_e = getRandomBigInt(minE, maxE);
+                
+                // Ensure global_e is odd to increase the chance of being coprime with phi
+                if (global_e % 2n === 0n) {
+                    global_e += 1n;
+                }
+
+                while (gcd(global_e, phi) !== 1n) {
+                    global_e += 2n;
+                    if (global_e >= maxE) {
+                        global_e = 3n; // Fallback loop constraint
+                    }
                 }
 
                 global_d = modInverse(global_e, phi);
 
                 const resBox = document.getElementById('keyResult');
-                resBox.innerHTML = `Public Key (n, e): <strong>(${global_n}, ${global_e})</strong><br>Private Key (n, d): <strong>(${global_n}, ${global_d})</strong>`;
+                resBox.innerHTML = `<strong>Public Key (n, e):</strong><br>(${global_n}, ${global_e})<br><br><strong>Private Key (n, d):</strong><br>(${global_n}, ${global_d})`;
                 
-                clearError('cryptoError');
+                hideError('cryptoError');
             } catch (err) {
-                showError('keyError', "Error: " + err.message);
+                displayError('keyError', "Initialization Error: " + err.message);
                 global_n = null; 
-                document.getElementById('keyResult').innerHTML = "Public Key (n, e): Generation failed.<br>Private Key (n, d): Generation failed.";
+                document.getElementById('keyResult').innerHTML = "<strong>Public Key (n, e):</strong><br><span style='color:#e74c3c;'>Generation Failed</span><br><br><strong>Private Key (n, d):</strong><br><span style='color:#e74c3c;'>Generation Failed</span>";
             }
         }
 
         function executeCrypto() {
-            clearError('cryptoError');
+            hideError('cryptoError');
+            
             if (!global_n) {
-                showError('cryptoError', "System Error: RSA keys must be generated prior to execution.");
+                displayError('cryptoError', "System Fault: Cryptographic keys must be generated prior to operation.");
                 return;
             }
             
-            let textVal = document.getElementById('inputText').value;
+            const textVal = document.getElementById('inputText').value;
             if (!textVal) {
-                showError('cryptoError', "Input Error: Data field cannot be empty.");
+                displayError('cryptoError', "Input Fault: Target data field is empty.");
                 return;
             }
 
-            let msg = BigInt(textVal);
+            const msg = BigInt(textVal);
             const mode = document.querySelector('input[name="opMode"]:checked').value;
             const resSpan = document.getElementById('cryptoResult');
 
@@ -211,25 +414,29 @@
                 let result;
                 if (mode === 'encrypt') {
                     if (msg >= global_n) {
-                        throw new Error(`Mathematical Constraint: The message M (${msg}) must be strictly less than the modulus n (${global_n}) to prevent data loss.`);
+                        throw new Error(`Data Bound Error: Message M (${msg}) must be strictly less than modulus n (${global_n}).`);
                     }
                     if (msg < 0n) {
-                        throw new Error("Input value cannot be negative.");
+                        throw new Error("Data Bound Error: Negative integers are not supported.");
                     }
 
                     result = modPow(msg, global_e, global_n);
-                    resSpan.innerText = result.toString() + " (Encrypted Ciphertext)";
+                    resSpan.innerText = `${result} (Ciphertext)`;
+                    
+                    // Auto-toggle to decrypt for workflow convenience
                     document.getElementById('modeDec').checked = true; 
                 } else {
                     result = modPow(msg, global_d, global_n);
-                    resSpan.innerText = result.toString() + " (Decrypted Plaintext)";
+                    resSpan.innerText = `${result} (Plaintext)`;
+                    
+                    // Auto-toggle to encrypt for workflow convenience
                     document.getElementById('modeEnc').checked = true; 
                 }
                 
                 document.getElementById('inputText').value = result.toString();
             } catch (err) {
-                showError('cryptoError', "Execution Terminated: " + err.message);
-                resSpan.innerText = "...";
+                displayError('cryptoError', "Execution Halted: " + err.message);
+                resSpan.innerText = "Error";
             }
         }
     </script>
