@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSA Cryptography System - Initialization</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>RSA Cryptography System</h1>
+        <p class="subtitle">Initialization and Key Generation Module</p>
+
+        <button class="btn-manual" onclick="openManual()">View System Documentation</button>
+
+        <div class="card">
+            <h3>Part I: Parameter Definition</h3>
+            
+            <button class="btn-draw" onclick="drawRandomPrimes()">Draw Random Primes</button>
+            
+            <label for="inputP">Prime Parameter (p):</label> 
+            <input type="text" id="inputP" placeholder="Enter or draw a prime number">
+            
+            <label for="inputQ">Prime Parameter (q):</label> 
+            <input type="text" id="inputQ" placeholder="Enter or draw a distinct prime number">
+            
+            <button onclick="generateKeys()">Generate Cryptographic Keys</button>
+            <div id="keyError" class="error-msg"></div>
+            
+            <div class="result-box" id="keyResult">
+                <strong>Status:</strong><br><span style="color:#85929e;">Awaiting generation...</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Part II: Operation Routing</h3>
+            <p style="margin-bottom: 15px; color: #5d6d7e; font-size: 0.95rem;">Select the appropriate module below. Valid cryptographic keys must be generated in Part I before proceeding.</p>
+            <button class="btn-nav btn-encrypt" onclick="window.location.href='encryption.html'">Proceed to Encryption Module</button>
+            <button class="btn-nav btn-decrypt" onclick="window.location.href='decryption.html'">Proceed to Decryption Module</button>
+        </div>
+    </div>
+
+</body>
+</html>

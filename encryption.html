@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSA Cryptography - Encryption</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Encryption Module</h1>
+        <p class="subtitle">Secure Data Transformation</p>
+
+        <a href="index.html" class="back-link">← Return to Key Generation</a>
+
+        <div class="card encryption">
+            <h3>Cryptographic Parameters</h3>
+            <label for="inputN_enc">Modulus (n):</label> 
+            <input type="text" id="inputN_enc" placeholder="Enter public modulus (n)">
+
+            <label for="inputE_enc">Public Exponent (e):</label> 
+            <input type="text" id="inputE_enc" placeholder="Enter public exponent (e)">
+
+            <h3 style="margin-top: 20px;">Data Input</h3>
+            <label for="inputPlaintext">Plaintext Message (Numeric):</label> 
+            <input type="text" id="inputPlaintext" placeholder="Enter numeric plaintext (M < n)">
+            
+            <button class="btn-encrypt" onclick="executeEncryption()">Encrypt Data</button>
+            <div id="encryptError" class="error-msg"></div>
+
+            <div class="result-box">
+                <strong>Ciphertext Output:</strong> 
+                <span id="encryptResult" class="highlight-result">-</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

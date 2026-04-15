@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSA Cryptography - Decryption</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Decryption Module</h1>
+        <p class="subtitle">Secure Data Restoration</p>
+
+        <a href="index.html" class="back-link">← Return to Key Generation</a>
+
+        <div class="card decryption">
+            <h3>Cryptographic Parameters</h3>
+            <label for="inputN_dec">Modulus (n):</label> 
+            <input type="text" id="inputN_dec" placeholder="Enter public modulus (n)">
+
+            <label for="inputD_dec">Private Exponent (d):</label> 
+            <input type="text" id="inputD_dec" placeholder="Enter private exponent (d)">
+
+            <h3 style="margin-top: 20px;">Data Input</h3>
+            <label for="inputCiphertext">Ciphertext Message (Numeric):</label> 
+            <input type="text" id="inputCiphertext" placeholder="Enter numeric ciphertext">
+            
+            <button class="btn-decrypt" onclick="executeDecryption()">Decrypt Data</button>
+            <div id="decryptError" class="error-msg"></div>
+
+            <div class="result-box">
+                <strong>Plaintext Output:</strong> 
+                <span id="decryptResult" class="highlight-result">-</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
