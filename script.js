@@ -19,14 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * System Documentation Link
- */
-function openManual() {
-    const docLink = 'https://docs.google.com/document/d/1PuFXTfg91CXkKjmKO-oEcp7P8lSUZKKpTSR9DStSeL8/edit?tab=t.0'; 
-    window.open(docLink, '_blank');
-}
-
-/**
  * Core Mathematical Utility Functions (BigInt)
  */
 function gcd(a, b) {
